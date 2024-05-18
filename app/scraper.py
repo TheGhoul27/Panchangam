@@ -80,7 +80,9 @@ def get_panchangam():
             col1.append(all_vals[i])
             skip += 1
 
-    panchangam = {}
+    panchangam = {
+        'Title': title,
+    }
 
     for a, b in zip(col1, col2):
         temp = a.split(' ')
@@ -102,5 +104,12 @@ def get_panchangam():
             if a in ['Tithi', 'Nakshatram', 'Yogam', 'Karanam']:
                 b = b.replace('  ', '\n')
             panchangam[a] = b
+
+    details = f'City: {panchangam["City"]}, Sunrise: {panchangam["Sunrise"]}, Sunset: {panchangam["Sunset"]}'
+    panchangam['Details'] = details
+    panchangam.pop('City', None)
+    panchangam.pop('Sunrise', None)
+    panchangam.pop('Sunset', None)
+
     panchangam = {k.lower(): v for k, v in panchangam.items()}
     return panchangam
