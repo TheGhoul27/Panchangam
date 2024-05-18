@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Panchangam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ panchangam.title }}</h1>
+        <h2>{{ panchangam.details }}</h2>
+        <h3>Panchangam</h3>
+        <h4>{{ panchangam.samvatsara }}</h4>
+        <table>
+            <tr>
+                <th>Ayana</th>
+                <td>{{ panchangam.ayana }}</td>
+            </tr>
+            <tr>
+                <th>Rutu</th>
+                <td>{{ panchangam.ruthu }}</td>
+            </tr>
+            <tr>
+                <th>Masa</th>
+                <td>{{ panchangam.masa }}</td>
+            </tr>
+            <tr>
+                <th>Paksha</th>
+                <td>{{ panchangam.paksham }}</td>
+            </tr>
+            <tr>
+                <th>Tithi</th>
+                <td>{{ panchangam.tithi }}</td>
+            </tr>
+            <tr>
+                <th>Vasara</th>
+                <td>{{ panchangam.vasara }}</td>
+            </tr>
+            <tr>
+                <th>Nakshatra</th>
+                <td>{{ panchangam.nakshatram }}</td>
+            </tr>
+            <tr>
+                <th>Yoga</th>
+                <td>{{ panchangam.yogam }}</td>
+            </tr>
+            <tr>
+                <th>Karana</th>
+                <td>{{ panchangam.karanam }}</td>
+            </tr>
+        </table>
+
+        <h3>Time to Avoid</h3>
+        <table>
+            <tr>
+                <th>Rahukalam</th>
+                <td>{{ panchangam.rahukalam }}</td>
+            </tr>
+            <tr>
+                <th>Yamagandam</th>
+                <td>{{ panchangam.yamagandam }}</td>
+            </tr>
+            <tr>
+                <th>Varjyam</th>
+                <td>{{ panchangam.varjyam }}</td>
+            </tr>
+            <tr>
+                <th>Gulika</th>
+                <td>{{ panchangam.gulika }}</td>
+            </tr>
+        </table>
+
+        <h3>Good Time</h3>
+        <table>
+            <tr>
+                <th>Amritakalam</th>
+                <td>{{ panchangam.amritakalam }}</td>
+            </tr>
+            <tr>
+                <th>Abhijit Muhurtham</th>
+                <td>{{ panchangam.abhijit_muhurtham }}</td>
+            </tr>
+        </table>
+        <h6>Courtesy: https://www.panchangam.org/</h6>
+    </div>
+</body>
+</html>
