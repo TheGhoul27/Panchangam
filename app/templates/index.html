@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Today's Panchangam</title>
+    <title>Panchangam</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>{{ panchangam.title }}</h1>
         <h2>{{ panchangam.details }}</h2>
+        <form method="post">
+            <label for="date">Select Date:</label>
+            <input type="date" id="date" name="date" value="{{ date }}">
+            <button type="submit">Get Panchangam</button>
+        </form>
         <h3>Panchangam</h3>
         <h4>{{ panchangam.samvatsara }}</h4>
         <table>

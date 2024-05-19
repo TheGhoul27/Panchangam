@@ -10,9 +10,11 @@ def get_content(url, css):
     return panchangam
 
 
-def get_panchangam():
+def get_panchangam(date_obj):
     css = "td"
-    url = "https://www.panchangam.org/global/daily.php?city=New+York#google_vignette"
+    date_str = date_obj.strftime('%Y-%m-%d')
+    # url = "https://www.panchangam.org/global/daily.php?city=New+York#google_vignette"
+    url = f"https://www.panchangam.org/global/daily.php?city=New+York&date={date_str}"
 
     day_map = {
         'Monday': 'Indu Vasara',
@@ -80,6 +82,7 @@ def get_panchangam():
             col1.append(all_vals[i])
             skip += 1
 
+    title = title.replace("Today's ", '')
     panchangam = {
         'Title': title,
     }
