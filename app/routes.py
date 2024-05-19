@@ -12,6 +12,8 @@ def index():
         city = request.form['city']
         city = city.split(',')[0]
         city = city.replace(' ', '+')
+        city = city.replace(' City', '')
+        city = city.replace(' city', '')
         try:
             date_obj = datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
