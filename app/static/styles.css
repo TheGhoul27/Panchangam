@@ -24,6 +24,7 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
@@ -32,11 +33,13 @@ form label {
     font-weight: bold;
 }
 
-form input[type="date"] {
+form input[type="date"],
+form select {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 form button {
