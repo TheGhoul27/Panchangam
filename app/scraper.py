@@ -4,7 +4,7 @@ import datetime
 
 
 def get_content(url, css):
-    page = req.get(url)
+    page = req.get(url, verify=False)
     soup = bs(page.content, "html.parser")
     panchangam = soup.select(css)
     return panchangam
