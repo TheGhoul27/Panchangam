@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup as bs
 import requests as req
 import datetime
+import re
 
 
 def get_content(url, css):
@@ -28,6 +29,7 @@ def get_panchangam(date_obj, city):
 
     ruthu_map = {
         'Chaithra': 'Vasanta Ruthu',
+        'Chaitra': 'Vasanta Ruthu',
         'Vaisakha': 'Vasanta Ruthu',
         'Jyeshta': 'Greeshma Ruthu',
         'Ashadha': 'Greeshma Ruthu',
@@ -43,6 +45,7 @@ def get_panchangam(date_obj, city):
 
     ayana_map = {
         'Chaithra': 'Uttharayana',
+        'Chaitra': 'Uttharayana',
         'Vaisakha': 'Uttharayana',
         'Jyeshta': 'Uttharayana',
         'Ashadha': 'Daakshinayana',
@@ -69,7 +72,7 @@ def get_panchangam(date_obj, city):
     title = all_vals[0]
 
     col1 = ['Samvatsara']
-    col2 = ['Krodhi Nama Samvatsara']
+    col2 = ['Viswavasu Nama Samvatsara']
 
     skip = 0
     for i in range(1, len(all_vals)):
@@ -104,8 +107,18 @@ def get_panchangam(date_obj, city):
             panchangam['Ruthu'] = ruthu_map[b]
             panchangam['Vasara'] = day_map[weekday_name]
         else:
-            if a in ['Tithi', 'Nakshatram', 'Yogam', 'Karanam']:
+            if a == 'Tithi':
+                pattern = r'(\w+\s+:\s+.*?(?=\s+\w+\s+:|$))'
+                matches = re.findall(pattern, b)
+                b = '\n'.join(matches)
+            if a in ['Nakshatram', 'Yogam', 'Karanam']:
                 b = b.replace('  ', '\n')
+                pattern = r'(\w+\s*:\s*.*?(?=\s+\w+\s*:|$))'
+                matches = re.findall(pattern, b)
+                sample = []
+                for i in range(0, len(matches), 3):
+                    sample.append(matches[i:i + 2])
+                b = '\n'.join([': '.join(i) for i in sample])
             panchangam[a] = b
 
     details = f'City: {panchangam["City"]}, Sunrise: {panchangam["Sunrise"]}, Sunset: {panchangam["Sunset"]}'
