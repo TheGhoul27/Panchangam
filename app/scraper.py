@@ -72,7 +72,7 @@ def get_panchangam(date_obj, city):
     title = all_vals[0]
 
     col1 = ['Samvatsara']
-    col2 = ['Viswavasu Nama Samvatsara']
+    col2 = ['Parabhava Nama Samvatsara']
 
     skip = 0
     for i in range(1, len(all_vals)):
