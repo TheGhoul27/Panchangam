@@ -26,6 +26,7 @@
     --color-good-soft:          #E9F5EB;
     --color-ring:               #B45309;
     --color-input:              #FFFFFF;
+    --color-input-fg:           #1F2937;
     --glow-gold:                rgba(180, 83, 9, 0.12);
     --glow-indigo:              rgba(46, 42, 114, 0.06);
     --watermark-opacity:        0.05;
@@ -66,7 +67,8 @@
     --color-good:               #5ECF77;
     --color-good-soft:          #14261A;
     --color-ring:               #E39A3C;
-    --color-input:              #191627;
+    --color-input:              #FFFFFF;
+    --color-input-fg:           #1A1A1A;
     --glow-gold:                rgba(227, 154, 60, 0.14);
     --glow-indigo:              rgba(120, 110, 220, 0.16);
     --watermark-opacity:        0.07;
@@ -267,11 +269,11 @@ select {
     font-size: 16px;
     width: 100%;
     min-width: 0;
-    color: var(--color-body);
+    color: var(--color-input-fg);
     padding: 11px 13px;
     border: 1px solid var(--color-border-strong);
     border-radius: var(--radius-sm);
-    background-color: #fff;
+    background-color: var(--color-input);
     transition: border-color var(--transition), box-shadow var(--transition);
     cursor: pointer;
 }
@@ -334,7 +336,7 @@ button[type="submit"]:focus-visible {
 .bento .card table { flex: 1 1 auto; }
 
 table { width: 100%; border-collapse: collapse; }
-td { padding: 14px 0; vertical-align: top; }
+td { padding: 14px 0; vertical-align: top; overflow-wrap: break-word; }
 tr + tr td { border-top: 1px solid var(--color-border); }
 tr:hover td { background: var(--color-card-soft); }
 
@@ -352,11 +354,10 @@ td { text-align: left; }
 td:last-child { font-size: 1rem; color: var(--color-body); }
 td:last-child:empty { display: none; }
 
-/* Time values in the time cards: never wrap */
+/* Time values: slightly smaller so they fit narrow value columns without forcing overflow */
 .tone-good td:last-child,
 .tone-avoid td:last-child {
-    white-space: nowrap;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 /* ---- Footer ------------------------------------------------------------- */
