@@ -3,102 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panchangam</title>
+    <meta name="description" content="Daily Panchangam almanac — tithi, nakshatra, yoga, karana, and auspicious timings by date and city.">
+    <title>Panchangam · Daily Almanac</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        /* Apply saved / system theme before paint to avoid a flash. */
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            if (t !== 'light' && t !== 'dark') {
+                t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
 </head>
 <body>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false" title="Toggle light / dark">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
     <div class="container">
-        <h1>{{ panchangam.title }}</h1>
-        <h2>{{ panchangam.details }}</h2>
-        <form method="post">
-            <label for="date">Select Date:</label>
-            <input type="date" id="date" name="date" value="{{ date }}">
-            <label for="city">Select City:</label>
-            <select id="city" name="city">
-                {% for city in cities %}
-                    <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
-                {% endfor %}
-            </select>
+        <div class="watermark" aria-hidden="true">
+            <svg viewBox="0 0 240 240" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="120" cy="120" r="20"/>
+                <circle cx="120" cy="120" r="34"/>
+                <circle cx="120" cy="120" r="58"/>
+                <circle cx="120" cy="120" r="86"/>
+                <circle cx="120" cy="120" r="112"/>
+                <g id="petal">
+                    <ellipse cx="120" cy="62" rx="15" ry="30"/>
+                    <ellipse cx="120" cy="52" rx="7" ry="18"/>
+                </g>
+                <use href="#petal" transform="rotate(45 120 120)"/>
+                <use href="#petal" transform="rotate(90 120 120)"/>
+                <use href="#petal" transform="rotate(135 120 120)"/>
+                <use href="#petal" transform="rotate(180 120 120)"/>
+                <use href="#petal" transform="rotate(225 120 120)"/>
+                <use href="#petal" transform="rotate(270 120 120)"/>
+                <use href="#petal" transform="rotate(315 120 120)"/>
+            </svg>
+        </div>
+        <header class="masthead">
+            <span class="brand">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+                Panchangam
+            </span>
+            <h1>{{ panchangam.title }}</h1>
+            <p class="subtitle">{{ panchangam.details }}</p>
+            <div class="ornament" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3l1.9 6.1L20 12l-6.1 1.9L12 20l-1.9-6.1L4 12l6.1-1.9z"/></svg>
+            </div>
+        </header>
+
+        <form method="post" class="form-grid card" aria-label="Look up a daily Panchangam">
+            <div class="field">
+                <label for="date">Select Date</label>
+                <input type="date" id="date" name="date" value="{{ date }}">
+            </div>
+            <div class="field">
+                <label for="city">Select City</label>
+                <select id="city" name="city">
+                    {% for city in cities %}
+                        <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <button type="submit">Get Panchangam</button>
         </form>
-        <h3>Panchangam</h3>
-        <h4>{{ panchangam.samvatsara }}</h4>
-        <table>
-            <tr>
-                <th>Ayana</th>
-                <td>{{ panchangam.ayana }}</td>
-            </tr>
-            <tr>
-                <th>Rutu</th>
-                <td>{{ panchangam.ruthu }}</td>
-            </tr>
-            <tr>
-                <th>Masa</th>
-                <td>{{ panchangam.masa }}</td>
-            </tr>
-            <tr>
-                <th>Paksha</th>
-                <td>{{ panchangam.paksham }}</td>
-            </tr>
-            <tr>
-                <th>Tithi</th>
-                <!-- <td>{{ panchangam.tithi }}</td> -->
-                <td style="white-space: pre-line;">{{ panchangam.tithi }}</td>
-            </tr>
-            <tr>
-                <th>Vasara</th>
-                <td>{{ panchangam.vasara }}</td>
-            </tr>
-            <tr>
-                <th>Nakshatra</th>
-                <!-- <td>{{ panchangam.nakshatram }}</td> -->
-                <td style="white-space: pre-line;">{{ panchangam.nakshatram }}</td>
-            </tr>
-            <tr>
-                <th>Yoga</th>
-                <!-- <td>{{ panchangam.yogam }}</td> -->
-                <td style="white-space: pre-line;">{{ panchangam.yogam }}</td>
-            </tr>
-            <tr>
-                <th>Karana</th>
-                <!-- <td>{{ panchangam.karanam }}</td> -->
-                <td style="white-space: pre-line;">{{ panchangam.karanam }}</td>
-            </tr>
-        </table>
 
-        <h3>Time to Avoid</h3>
-        <table>
-            <tr>
-                <th>Rahukalam</th>
-                <td>{{ panchangam.rahukalam }}</td>
-            </tr>
-            <tr>
-                <th>Yamagandam</th>
-                <td>{{ panchangam.yamagandam }}</td>
-            </tr>
-            <tr>
-                <th>Varjyam</th>
-                <td>{{ panchangam.varjyam }}</td>
-            </tr>
-            <tr>
-                <th>Gulika</th>
-                <td>{{ panchangam.gulika }}</td>
-            </tr>
-        </table>
+        <div class="bento">
+        <section class="card card--accented b-main" aria-labelledby="panchangam-h">
+            <div class="section-head">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-2-1.6-5-1.6-7 0v12c2-1.6 5-1.6 7 0 2-1.6 5-1.6 7 0V6c-2-1.6-5-1.6-7 0z"/><path d="M12 6v12"/></svg>
+                </span>
+                <div>
+                    <span class="eyebrow">Daily Almanac</span>
+                    <h3 id="panchangam-h">Panchangam</h3>
+                </div>
+            </div>
+            <p class="samvatsara">{{ panchangam.samvatsara }}</p>
+            <table>
+                <tr><th>Ayana</th><td>{{ panchangam.ayana }}</td></tr>
+                <tr><th>Rutu</th><td>{{ panchangam.ruthu }}</td></tr>
+                <tr><th>Masa</th><td>{{ panchangam.masa }}</td></tr>
+                <tr><th>Paksha</th><td>{{ panchangam.paksham }}</td></tr>
+                <tr><th>Tithi</th><td style="white-space: pre-line;">{{ panchangam.tithi }}</td></tr>
+                <tr><th>Vasara</th><td>{{ panchangam.vasara }}</td></tr>
+                <tr><th>Nakshatra</th><td style="white-space: pre-line;">{{ panchangam.nakshatram }}</td></tr>
+                <tr><th>Yoga</th><td style="white-space: pre-line;">{{ panchangam.yogam }}</td></tr>
+                <tr><th>Karana</th><td style="white-space: pre-line;">{{ panchangam.karanam }}</td></tr>
+            </table>
+        </section>
 
-        <h3>Good Time</h3>
-        <table>
-            <tr>
-                <th>Amritakalam</th>
-                <td>{{ panchangam.amritakalam }}</td>
-            </tr>
-            <tr>
-                <th>Abhijit Muhurtham</th>
-                <td>{{ panchangam.abhijit_muhurtham }}</td>
-            </tr>
-        </table>
-        <h6>Courtesy: https://www.panchangam.org/</h6>
-        <h4>Project by Pradhumna Guru Prasad</h4>
+        <section class="card tone-good b-good" aria-labelledby="good-h">
+            <div class="section-head">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2 5.4L20 11l-6 1.6L12 18l-2-5.4L4 11l6-1.6z"/><path d="M12 2v2M12 20v2"/></svg>
+                </span>
+                <div>
+                    <span class="eyebrow">Auspicious</span>
+                    <h3 id="good-h">Good Time</h3>
+                </div>
+            </div>
+            <table>
+                <tr><th>Amritakalam</th><td>{{ panchangam.amritakalam }}</td></tr>
+                <tr><th>Abhijit Muhurtham</th><td>{{ panchangam.abhijit_muhurtham }}</td></tr>
+            </table>
+        </section>
+
+        <section class="card tone-avoid b-avoid" aria-labelledby="avoid-h">
+            <div class="section-head">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M6.5 6.5l11 11"/></svg>
+                </span>
+                <div>
+                    <span class="eyebrow">Inauspicious</span>
+                    <h3 id="avoid-h">Time to Avoid</h3>
+                </div>
+            </div>
+            <table>
+                <tr><th>Rahukalam</th><td>{{ panchangam.rahukalam }}</td></tr>
+                <tr><th>Yamagandam</th><td>{{ panchangam.yamagandam }}</td></tr>
+                <tr><th>Varjyam</th><td>{{ panchangam.varjyam }}</td></tr>
+                <tr><th>Gulika</th><td>{{ panchangam.gulika }}</td></tr>
+            </table>
+        </section>
+        </div>
+
+        <footer class="footer">
+            <p>Courtesy: <a href="https://www.panchangam.org/" rel="noopener" target="_blank">panchangam.org</a></p>
+            <p class="credit">Project by Pradhumna Guru Prasad</p>
+        </footer>
     </div>
+    <script>
+        (function () {
+            var btn = document.querySelector('.theme-toggle');
+            if (!btn) return;
+            function sync() {
+                btn.setAttribute('aria-pressed',
+                    document.documentElement.getAttribute('data-theme') === 'dark' ? 'true' : 'false');
+            }
+            sync();
+            btn.addEventListener('click', function () {
+                var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+                var next = cur === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                sync();
+            });
+        })();
+    </script>
 </body>
 </html>
